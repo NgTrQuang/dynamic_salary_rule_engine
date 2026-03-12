@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Calculator, AlertTriangle, MinusCircle, ChevronDown, ChevronUp } from "lucide-react";
 import { RULE_INFO } from "../data/ruleInfo";
 import { InfoTip } from "./Tooltip";
+import { useLang } from "../i18n/index.jsx";
 
 function formatVND(val) {
   if (val === null || val === undefined) return "—";
@@ -137,14 +138,24 @@ function SectionBlock({ section, resultMap, allResults }) {
 }
 
 export default function ResultPanel({ results, rules, warnings = [] }) {
+  const { t } = useLang();
+
+  const SECTIONS = [
+    { key: "earnings", label: t.sectionEarnings, categories: ["earning"],   headerCls: "bg-green-50 border-green-200 text-green-800",   rowCls: "border-l-4 border-green-300 bg-green-50/70",       valueCls: "text-green-800" },
+    { key: "gross",    label: t.sectionGross,    codes: ["GROSS"],           headerCls: "bg-blue-50 border-blue-200 text-blue-800",     rowCls: "border-l-4 border-blue-400 bg-blue-50 font-semibold", valueCls: "text-blue-800" },
+    { key: "insurance",label: t.sectionInsurance,categories: ["insurance"], headerCls: "bg-orange-50 border-orange-200 text-orange-800", rowCls: "border-l-4 border-orange-300 bg-orange-50/70",     valueCls: "text-orange-800" },
+    { key: "tax",      label: t.sectionTax,      categories: ["tax"],       headerCls: "bg-purple-50 border-purple-200 text-purple-800", rowCls: "border-l-4 border-purple-300 bg-purple-50/70",    valueCls: "text-purple-800" },
+    { key: "net",      label: t.sectionNet,      codes: ["NET"],             headerCls: "bg-blue-100 border-blue-300 text-blue-900",    rowCls: "border-l-4 border-blue-500 bg-blue-50 font-semibold", valueCls: "text-blue-900" },
+  ];
+
   if (!results || results.length === 0) {
     return (
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
           <Calculator size={18} className="text-gray-600" />
-          <h2 className="text-lg font-semibold text-gray-800">Results</h2>
+          <h2 className="text-lg font-semibold text-gray-800">{t.results}</h2>
         </div>
-        <p className="text-sm text-gray-400 italic">No results yet. Add rules and click Calculate.</p>
+        <p className="text-sm text-gray-400 italic">{t.noResults}</p>
       </div>
     );
   }
@@ -174,14 +185,14 @@ export default function ResultPanel({ results, rules, warnings = [] }) {
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-2">
         <Calculator size={18} className="text-gray-600" />
-        <h2 className="text-lg font-semibold text-gray-800">Results</h2>
-        <span className="ml-auto text-xs text-gray-400">{computed.length} computed · {skipped.length} skipped</span>
+        <h2 className="text-lg font-semibold text-gray-800">{t.results}</h2>
+        <span className="ml-auto text-xs text-gray-400">{computed.length} {t.computed} · {skipped.length} {t.skipped}</span>
       </div>
 
       {warnings.length > 0 && (
         <div className="rounded-xl bg-amber-50 border border-amber-200 p-3 flex flex-col gap-1">
           <div className="flex items-center gap-1.5 text-amber-700 font-semibold text-sm">
-            <AlertTriangle size={15} /> Cảnh báo
+            <AlertTriangle size={15} /> {t.warnings}
           </div>
           {warnings.map((w, i) => (
             <p key={i} className="text-xs text-amber-700">{w}</p>
@@ -192,7 +203,7 @@ export default function ResultPanel({ results, rules, warnings = [] }) {
       {errors.length > 0 && (
         <div className="rounded-xl bg-red-50 border border-red-200 p-3 flex flex-col gap-1">
           <div className="flex items-center gap-1.5 text-red-700 font-semibold text-sm">
-            <AlertTriangle size={15} /> Errors
+            <AlertTriangle size={15} /> {t.errors}
           </div>
           {errors.map((r) => (
             <p key={r.code} className="text-xs text-red-600 font-mono">[{r.code}] {r.error}</p>
@@ -213,7 +224,7 @@ export default function ResultPanel({ results, rules, warnings = [] }) {
       {/* Other rules not in any section */}
       {otherRows.length > 0 && (
         <SectionBlock
-          section={{ key: "other", label: "Other", headerCls: "bg-gray-50 border-gray-200 text-gray-700", rowCls: "border-l-4 border-gray-300 bg-gray-50", valueCls: "text-gray-700" }}
+          section={{ key: "other", label: t.sectionOther, headerCls: "bg-gray-50 border-gray-200 text-gray-700", rowCls: "border-l-4 border-gray-300 bg-gray-50", valueCls: "text-gray-700" }}
           resultMap={resultMap}
           allResults={otherRows}
         />
@@ -222,7 +233,7 @@ export default function ResultPanel({ results, rules, warnings = [] }) {
       {/* NET highlight */}
       {netResult && !netResult.error && netResult.value !== null && (
         <div className="mt-1 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-3 flex items-center justify-between shadow-md">
-          <span className="text-white font-semibold text-sm">NET SALARY</span>
+          <span className="text-white font-semibold text-sm">{t.netSalaryLabel}</span>
           <span className="text-white font-bold text-xl">{formatVND(netResult.value)}</span>
         </div>
       )}

@@ -2,13 +2,7 @@ import React from "react";
 import { SlidersHorizontal, AlertTriangle } from "lucide-react";
 import { MIN_WAGE_BY_REGION } from "../data/defaultRules";
 import { InfoTip } from "./Tooltip";
-
-const REGIONS = [
-  { value: "I",   label: "Vùng I — 4,960,000 ₫ (HN, HCM, ...)" },
-  { value: "II",  label: "Vùng II — 4,410,000 ₫" },
-  { value: "III", label: "Vùng III — 3,860,000 ₫" },
-  { value: "IV",  label: "Vùng IV — 3,450,000 ₫" },
-];
+import { useLang } from "../i18n/index.jsx";
 
 function fmt(val) {
   if (val === null || val === undefined || val === "") return "";
@@ -72,6 +66,15 @@ function ToggleField({ label, fieldKey, value, description, onChange }) {
 }
 
 export default function ContextInput({ context, onChange }) {
+  const { t } = useLang();
+
+  const REGIONS = [
+    { value: "I",   label: t.regionI },
+    { value: "II",  label: t.regionII },
+    { value: "III", label: t.regionIII },
+    { value: "IV",  label: t.regionIV },
+  ];
+
   function handleChange(key, val) {
     onChange({ ...context, [key]: val });
   }
@@ -79,92 +82,53 @@ export default function ContextInput({ context, onChange }) {
   const minWage = MIN_WAGE_BY_REGION[context.region] ?? MIN_WAGE_BY_REGION["III"];
   const insuranceWarn =
     context.insurance_enabled && context.insurance_salary < minWage
-      ? `Dưới lương tối thiểu vùng ${context.region} (${fmt(minWage)} ₫). Hệ thống tự dùng mức tối thiểu.`
+      ? t.warnInsuranceBelowMin.replace("{region}", context.region).replace("{min}", fmt(minWage))
       : null;
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2">
         <SlidersHorizontal size={18} className="text-gray-600" />
-        <h2 className="text-lg font-semibold text-gray-800">Context Input</h2>
+        <h2 className="text-lg font-semibold text-gray-800">{t.contextInput}</h2>
       </div>
 
-      {/* ── LƯƠNG ───────────────────────────────────────── */}
+      {/* ── SALARY ── */}
       <div>
-        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 border-b border-gray-100 pb-1">Lương</p>
+        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 border-b border-gray-100 pb-1">{t.groupSalary}</p>
         <div className="flex flex-col gap-3">
-          <NumberField
-            label="Gross Salary"
-            fieldKey="base_salary"
-            value={context.base_salary}
-            description="Lương thực nhận — dùng tính thuế TNCN"
-            onChange={handleChange}
-          />
-          <NumberField
-            label="Insurance Salary"
-            fieldKey="insurance_salary"
-            value={context.insurance_salary}
-            description="Lương đóng bảo hiểm (lương hợp đồng)"
-            tooltip="Lương ghi trong hợp đồng dùng để đóng BHXH/BHYT/BHTN. Không thấp hơn lương tối thiểu vùng. Tối đa 36,000,000 ₫ (20× lương cơ sở). Nghị định 74/2024/NĐ-CP."
-            warning={insuranceWarn}
-            onChange={handleChange}
-          />
-          <NumberField
-            label="Bonus"
-            fieldKey="bonus"
-            value={context.bonus}
-            description="Thưởng một lần (cộng vào GROSS)"
-            onChange={handleChange}
-          />
-          <NumberField
-            label="Sales Amount"
-            fieldKey="sales_amount"
-            value={context.sales_amount}
-            description="Doanh số — hoa hồng 5% cộng vào GROSS"
-            onChange={handleChange}
-          />
+          <NumberField label={t.fieldGrossSalary}     fieldKey="base_salary"      value={context.base_salary}      description={t.fieldGrossSalaryDesc}     onChange={handleChange} />
+          <NumberField label={t.fieldInsuranceSalary} fieldKey="insurance_salary" value={context.insurance_salary} description={t.fieldInsuranceSalaryDesc} tooltip={t.fieldInsuranceSalaryTip} warning={insuranceWarn} onChange={handleChange} />
+          <NumberField label={t.fieldBonus}           fieldKey="bonus"            value={context.bonus}            description={t.fieldBonusDesc}           onChange={handleChange} />
+          <NumberField label={t.fieldSalesAmount}     fieldKey="sales_amount"     value={context.sales_amount}     description={t.fieldSalesAmountDesc}     onChange={handleChange} />
         </div>
       </div>
 
-      {/* ── LÀNG GIỜ THÊM ───────────────────────────────── */}
+      {/* ── OVERTIME ── */}
       <div>
-        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 border-b border-gray-100 pb-1">Làm thêm giờ</p>
+        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 border-b border-gray-100 pb-1">{t.groupOvertime}</p>
         <div className="flex flex-col gap-3">
-          <NumberField
-            label="Overtime Hours"
-            fieldKey="overtime_hours"
-            value={context.overtime_hours}
-            description="Số giờ làm thêm trong kỳ"
-            onChange={handleChange}
-          />
-          <NumberField
-            label="Hourly Rate"
-            fieldKey="hourly_rate"
-            value={context.hourly_rate}
-            description="Đơn giá giờ làm thêm (×1.5 tự động)"
-            onChange={handleChange}
-          />
+          <NumberField label={t.fieldOvertimeHours} fieldKey="overtime_hours" value={context.overtime_hours} description={t.fieldOvertimeHoursDesc} onChange={handleChange} />
+          <NumberField label={t.fieldHourlyRate}    fieldKey="hourly_rate"    value={context.hourly_rate}    description={t.fieldHourlyRateDesc}    onChange={handleChange} />
         </div>
       </div>
 
-      {/* ── CHẤM CÔNG ────────────────────────────────────── */}
+      {/* ── ATTENDANCE ── */}
       <div>
-        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 border-b border-gray-100 pb-1">Chấm công</p>
+        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 border-b border-gray-100 pb-1">{t.groupAttendance}</p>
         <div className="flex flex-col gap-3">
-          <NumberField label="Working Days"  fieldKey="working_days"  value={context.working_days}  description="Số ngày làm việc trong kỳ" onChange={handleChange} />
-          <NumberField label="Leave Days"    fieldKey="leave_days"    value={context.leave_days}    description="Số ngày nghỉ" onChange={handleChange} />
-          <NumberField label="Late Minutes"  fieldKey="late_minutes"  value={context.late_minutes}  description="Tổng phút đi muộn" onChange={handleChange} />
+          <NumberField label={t.fieldWorkingDays} fieldKey="working_days" value={context.working_days} description={t.fieldWorkingDaysDesc} onChange={handleChange} />
+          <NumberField label={t.fieldLeaveDays}   fieldKey="leave_days"   value={context.leave_days}   description={t.fieldLeaveDaysDesc}   onChange={handleChange} />
+          <NumberField label={t.fieldLateMinutes} fieldKey="late_minutes" value={context.late_minutes} description={t.fieldLateMinutesDesc} onChange={handleChange} />
         </div>
       </div>
 
-      {/* ── BẢO HIỂM & THUẾ ─────────────────────────────── */}
+      {/* ── INSURANCE & TAX ── */}
       <div>
-        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 border-b border-gray-100 pb-1">Bảo hiểm & Thuế</p>
+        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 border-b border-gray-100 pb-1">{t.groupInsuranceTax}</p>
         <div className="flex flex-col gap-3">
-          {/* Region dropdown */}
           <div className="flex flex-col gap-1">
-            <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Vùng lương tối thiểu</label>
-            <p className="text-xs text-gray-400">Theo Nghị định 74/2024/NĐ-CP (hiệu lực 1/7/2024)</p>
+            <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">{t.fieldRegion}</label>
+            <p className="text-xs text-gray-400">{t.fieldRegionDesc}</p>
             <select
               value={context.region}
               onChange={(e) => handleChange("region", e.target.value)}
@@ -175,20 +139,13 @@ export default function ContextInput({ context, onChange }) {
               ))}
             </select>
             <div className="text-xs text-gray-500 bg-gray-50 rounded-lg px-2 py-1">
-              Lương tối thiểu vùng {context.region}:{" "}
+              {t.fieldMinWageDisplay.replace("{region}", context.region)}{" "}
               <span className="font-semibold text-gray-700">{fmt(minWage)} ₫</span>
             </div>
           </div>
-
-          <NumberField
-            label="Dependents"
-            fieldKey="dependents"
-            value={context.dependents}
-            description="Số người phụ thuộc (giảm trừ 6,200,000 ₫/người — NQ 110/2025, từ 01/01/2026)"
-            onChange={handleChange}
-          />
-          <ToggleField label="Insurance (BHXH/BHYT/BHTN)" fieldKey="insurance_enabled" value={context.insurance_enabled} description="Bật = áp dụng bảo hiểm bắt buộc" onChange={handleChange} />
-          <ToggleField label="Income Tax (TNCN)"          fieldKey="tax_enabled"       value={context.tax_enabled}       description="Bật = tính thuế thu nhập cá nhân" onChange={handleChange} />
+          <NumberField label={t.fieldDependents} fieldKey="dependents" value={context.dependents} description={t.fieldDependentsDesc} onChange={handleChange} />
+          <ToggleField label={t.fieldInsuranceToggle} fieldKey="insurance_enabled" value={context.insurance_enabled} description={t.fieldInsuranceToggleDesc} onChange={handleChange} />
+          <ToggleField label={t.fieldTaxToggle}       fieldKey="tax_enabled"       value={context.tax_enabled}       description={t.fieldTaxToggleDesc}       onChange={handleChange} />
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Plus, Trash2, ChevronUp, ChevronDown } from "lucide-react";
 import { RULE_INFO, CATEGORY_INFO } from "../data/ruleInfo";
 import { InfoTip } from "./Tooltip";
+import { useLang } from "../i18n/index.jsx";
 
 const EMPTY_RULE = {
   code: "",
@@ -21,6 +22,7 @@ function formatVal(val) {
 }
 
 export default function RuleTable({ rules, onChange, results = [], context = {} }) {
+  const { t } = useLang();
   const [editingCell, setEditingCell] = useState(null); // { rowId, field }
 
   const sorted = [...rules].sort((a, b) => a.sequence - b.sequence);
@@ -141,12 +143,12 @@ export default function RuleTable({ rules, onChange, results = [], context = {} 
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-gray-800">Rule Editor</h2>
+        <h2 className="text-lg font-semibold text-gray-800">{t.ruleEditor}</h2>
         <button
           onClick={addRule}
           className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
         >
-          <Plus size={15} /> Add Rule
+          <Plus size={15} /> {t.btnAddRule}
         </button>
       </div>
 
@@ -155,14 +157,14 @@ export default function RuleTable({ rules, onChange, results = [], context = {} 
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="px-3 py-2 text-gray-500 font-medium w-12 text-center">#</th>
-              <th className="px-3 py-2 text-gray-500 font-medium w-20">Seq</th>
-              <th className="px-3 py-2 text-gray-500 font-medium w-28">Code</th>
-              <th className="px-3 py-2 text-gray-500 font-medium w-40">Name</th>
-              <th className="px-3 py-2 text-gray-500 font-medium w-24">Category</th>
-              <th className="px-3 py-2 text-gray-500 font-medium w-44">Condition</th>
-              <th className="px-3 py-2 text-gray-500 font-medium">Formula</th>
-              <th className="px-3 py-2 text-gray-500 font-medium w-36 text-right">Value</th>
-              <th className="px-3 py-2 text-gray-500 font-medium w-20 text-center">Actions</th>
+              <th className="px-3 py-2 text-gray-500 font-medium w-20">{t.colSeq}</th>
+              <th className="px-3 py-2 text-gray-500 font-medium w-28">{t.colCode}</th>
+              <th className="px-3 py-2 text-gray-500 font-medium w-40">{t.colName}</th>
+              <th className="px-3 py-2 text-gray-500 font-medium w-24">{t.colCategory}</th>
+              <th className="px-3 py-2 text-gray-500 font-medium w-44">{t.colCondition}</th>
+              <th className="px-3 py-2 text-gray-500 font-medium">{t.colFormula}</th>
+              <th className="px-3 py-2 text-gray-500 font-medium w-36 text-right">{t.colValue}</th>
+              <th className="px-3 py-2 text-gray-500 font-medium w-20 text-center">{t.colActions}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -216,8 +218,9 @@ export default function RuleTable({ rules, onChange, results = [], context = {} 
                       if (ctxVal !== undefined) return <span className="text-xs font-mono text-gray-400">{formatVal(ctxVal)}</span>;
                       return <span className="text-gray-300 text-xs">—</span>;
                     }
-                    if (r.skipped) return <span className="text-xs text-gray-400 italic">skipped</span>;
-                    if (r.error)   return <span className="text-xs text-red-500 italic">error</span>;
+                    if (r.skipped) return <span className="text-xs text-gray-400 italic">{t.valSkipped}</span>;
+                    if (r.error)   return <span className="text-xs text-red-500 italic">{t.valError}</span>;
+
                     const isDeduction = ["insurance", "deduction"].includes(rule.category) && r.value > 0;
                     return (
                       <span className={`text-xs font-mono font-semibold ${
