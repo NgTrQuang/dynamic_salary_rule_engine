@@ -142,7 +142,7 @@ export default function App() {
       <main className="max-w-screen-2xl mx-auto px-6 py-6 grid grid-cols-12 gap-6">
         {/* Rule Editor — full width */}
         <section className="col-span-12 bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
-          <RuleTable rules={rules} onChange={handleRulesChange} />
+          <RuleTable rules={rules} onChange={handleRulesChange} results={results} context={context} />
         </section>
 
         {/* Context Input */}

@@ -10,12 +10,19 @@ const EMPTY_RULE = {
   formula: "",
 };
 
-const CATEGORIES = ["earning", "deduction", "summary", "other"];
+const CATEGORIES = ["earning", "insurance", "tax", "deduction", "summary", "other"];
 
-export default function RuleTable({ rules, onChange }) {
+function formatVal(val) {
+  if (val === null || val === undefined) return "—";
+  if (typeof val === "number") return val.toLocaleString("vi-VN") + " ₫";
+  return String(val);
+}
+
+export default function RuleTable({ rules, onChange, results = [], context = {} }) {
   const [editingCell, setEditingCell] = useState(null); // { rowId, field }
 
   const sorted = [...rules].sort((a, b) => a.sequence - b.sequence);
+  const resultMap = Object.fromEntries(results.map((r) => [r.code, r]));
 
   function updateRule(id, field, value) {
     onChange(rules.map((r) => (r.id === id ? { ...r, [field]: value } : r)));
@@ -112,10 +119,12 @@ export default function RuleTable({ rules, onChange }) {
       );
     }
     const colorMap = {
-      earning: "bg-green-100 text-green-800",
+      earning:   "bg-green-100 text-green-800",
+      insurance: "bg-orange-100 text-orange-800",
+      tax:       "bg-purple-100 text-purple-800",
       deduction: "bg-red-100 text-red-800",
-      summary: "bg-blue-100 text-blue-800",
-      other: "bg-gray-100 text-gray-700",
+      summary:   "bg-blue-100 text-blue-800",
+      other:     "bg-gray-100 text-gray-700",
     };
     return (
       <span
@@ -150,6 +159,7 @@ export default function RuleTable({ rules, onChange }) {
               <th className="px-3 py-2 text-gray-500 font-medium w-24">Category</th>
               <th className="px-3 py-2 text-gray-500 font-medium w-44">Condition</th>
               <th className="px-3 py-2 text-gray-500 font-medium">Formula</th>
+              <th className="px-3 py-2 text-gray-500 font-medium w-36 text-right">Value</th>
               <th className="px-3 py-2 text-gray-500 font-medium w-20 text-center">Actions</th>
             </tr>
           </thead>
@@ -191,6 +201,27 @@ export default function RuleTable({ rules, onChange }) {
                 </td>
                 <td className="px-3 py-1.5 font-mono text-indigo-700">
                   <EditableCell rowId={rule.id} field="formula" value={rule.formula} />
+                </td>
+                <td className="px-3 py-1.5 text-right">
+                  {(() => {
+                    const r = resultMap[rule.code];
+                    if (!r) {
+                      // not yet computed — show context value if it's a direct context var
+                      const ctxVal = context[rule.code];
+                      if (ctxVal !== undefined) return <span className="text-xs font-mono text-gray-400">{formatVal(ctxVal)}</span>;
+                      return <span className="text-gray-300 text-xs">—</span>;
+                    }
+                    if (r.skipped) return <span className="text-xs text-gray-400 italic">skipped</span>;
+                    if (r.error)   return <span className="text-xs text-red-500 italic">error</span>;
+                    const isDeduction = ["insurance", "deduction"].includes(rule.category) && r.value > 0;
+                    return (
+                      <span className={`text-xs font-mono font-semibold ${
+                        isDeduction ? "text-red-600" : rule.category === "summary" ? "text-blue-700" : "text-gray-800"
+                      }`}>
+                        {isDeduction ? "− " : ""}{r.value?.toLocaleString("vi-VN")} ₫
+                      </span>
+                    );
+                  })()}
                 </td>
                 <td className="px-3 py-1.5 text-center">
                   <button
