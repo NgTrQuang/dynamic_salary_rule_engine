@@ -196,7 +196,7 @@ export default function ContextInput({ context, onChange }) {
             label="Dependents"
             fieldKey="dependents"
             value={context.dependents}
-            description="Số người phụ thuộc (giảm trừ 4,400,000 ₫/người)"
+            description="Số người phụ thuộc (giảm trừ 6,200,000 ₫/người — NQ 110/2025, từ 01/01/2026)"
             onChange={handleChange}
           />
           <ToggleField label="Insurance (BHXH/BHYT/BHTN)" fieldKey="insurance_enabled" value={context.insurance_enabled} description="Bật = áp dụng bảo hiểm bắt buộc" onChange={handleChange} />

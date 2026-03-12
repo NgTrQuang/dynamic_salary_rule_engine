@@ -129,7 +129,7 @@ export const defaultRules = [
     sequence: 31,
     category: "tax",
     condition: "tax_enabled && dependents > 0",
-    formula: "dependents * 4400000"
+    formula: "dependents * 6200000"
   },
   {
     id: crypto.randomUUID(),
