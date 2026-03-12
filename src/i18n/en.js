@@ -3,6 +3,8 @@ const en = {
   appTitle: "Dynamic Salary Rule Engine",
   appSubtitle: "Flexible payroll calculator powered by configurable rules",
   btnExport: "Export JSON",
+  btnExportExcel: "Export Excel",
+  btnExportExcelTitle: "Export sample payroll data to Excel (.xlsx)",
   btnImport: "Import JSON",
   btnReset: "Reset",
   btnCalculate: "Calculate",

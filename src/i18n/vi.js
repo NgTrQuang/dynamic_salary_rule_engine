@@ -3,6 +3,8 @@ const vi = {
   appTitle: "Dynamic Salary Rule Engine",
   appSubtitle: "Công cụ tính lương động theo quy tắc",
   btnExport: "Xuất JSON",
+  btnExportExcel: "Xuất Excel",
+  btnExportExcelTitle: "Xuất bảng lương mẫu ra file Excel (.xlsx)",
   btnImport: "Nhập JSON",
   btnReset: "Đặt lại",
   btnCalculate: "Tính lương",

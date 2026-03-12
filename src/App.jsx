@@ -6,7 +6,8 @@ import InfoModal from "./components/InfoModal";
 import { runEngine } from "./engine/ruleEngine";
 import { defaultRules, defaultContext, MIN_WAGE_BY_REGION } from "./data/defaultRules";
 import { useLang } from "./i18n/index.jsx";
-import { Download, Upload, Play, RefreshCw, Cpu } from "lucide-react";
+import { Download, Upload, Play, RefreshCw, Cpu, FileSpreadsheet } from "lucide-react";
+import { exportPayrollExcel } from "./utils/exportExcel";
 
 export default function App() {
   const { lang, setLang, t } = useLang();
@@ -141,6 +142,14 @@ export default function App() {
             className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-lg transition-colors"
           >
             <Download size={14} /> {t.btnExport}
+          </button>
+
+          <button
+            onClick={() => exportPayrollExcel(rules, lang)}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 rounded-lg transition-colors"
+            title={t.btnExportExcelTitle}
+          >
+            <FileSpreadsheet size={14} /> {t.btnExportExcel}
           </button>
 
           <button
