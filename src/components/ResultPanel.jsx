@@ -131,7 +131,7 @@ function SectionBlock({ section, resultMap, allResults }) {
   );
 }
 
-export default function ResultPanel({ results, rules }) {
+export default function ResultPanel({ results, rules, warnings = [] }) {
   if (!results || results.length === 0) {
     return (
       <div className="flex flex-col gap-3">
@@ -172,6 +172,17 @@ export default function ResultPanel({ results, rules }) {
         <h2 className="text-lg font-semibold text-gray-800">Results</h2>
         <span className="ml-auto text-xs text-gray-400">{computed.length} computed · {skipped.length} skipped</span>
       </div>
+
+      {warnings.length > 0 && (
+        <div className="rounded-xl bg-amber-50 border border-amber-200 p-3 flex flex-col gap-1">
+          <div className="flex items-center gap-1.5 text-amber-700 font-semibold text-sm">
+            <AlertTriangle size={15} /> Cảnh báo
+          </div>
+          {warnings.map((w, i) => (
+            <p key={i} className="text-xs text-amber-700">{w}</p>
+          ))}
+        </div>
+      )}
 
       {errors.length > 0 && (
         <div className="rounded-xl bg-red-50 border border-red-200 p-3 flex flex-col gap-1">

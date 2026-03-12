@@ -1,34 +1,34 @@
 {
   "rules": [
     {
-      "id": "00add850-58e7-431a-ae59-2a2058633249",
+      "id": "e62fa684-715b-4db0-b455-9741497f2cdc",
       "code": "BASIC",
       "name": "Basic Salary",
       "sequence": 1,
       "category": "earning",
       "condition": "",
-      "formula": "(base_salary / 26) * (working_days - leave_days)"
+      "formula": "base_salary"
     },
     {
-      "id": "61b5bd62-7ebf-47f2-af09-4b8e39c33bdc",
+      "id": "95200e8a-612b-4a8d-8fd4-7b338c4cfe06",
       "code": "LUNCH",
       "name": "Lunch Allowance",
       "sequence": 2,
       "category": "earning",
       "condition": "",
-      "formula": "730000"
+      "formula": "0"
     },
     {
-      "id": "04626af5-c93c-4996-8299-a50d5fc1b236",
+      "id": "f5ddc908-8419-4ccf-9a38-a10b3b628649",
       "code": "PHONE",
       "name": "Phone Allowance",
       "sequence": 3,
       "category": "earning",
       "condition": "",
-      "formula": "200000"
+      "formula": "0"
     },
     {
-      "id": "39530755-dc6c-498e-8715-86cd6ef03c72",
+      "id": "6f1674b8-c713-4723-b5a9-45d2da0352a2",
       "code": "OVERTIME",
       "name": "Overtime Pay",
       "sequence": 4,
@@ -37,7 +37,7 @@
       "formula": "overtime_hours * hourly_rate * 1.5"
     },
     {
-      "id": "37b1025e-f361-4b45-b458-06b5bb88e184",
+      "id": "105c3e20-a3fa-4456-9c72-6089463919da",
       "code": "BONUS",
       "name": "Bonus",
       "sequence": 5,
@@ -46,7 +46,7 @@
       "formula": "bonus"
     },
     {
-      "id": "da9d8af1-1195-4155-a608-32aa47ef187c",
+      "id": "441d8834-9913-4eb9-b8b2-f0ebcc5864c5",
       "code": "SALES_BONUS",
       "name": "Sales Commission (5%)",
       "sequence": 6,
@@ -55,25 +55,25 @@
       "formula": "sales_amount * 0.05"
     },
     {
-      "id": "9580be66-72c2-492e-b217-d64cd3d5ed26",
+      "id": "d319a003-70a0-4f90-b585-ba987967a697",
       "code": "GROSS",
-      "name": "Gross Salary",
+      "name": "Gross Salary (actual)",
       "sequence": 10,
       "category": "summary",
       "condition": "",
       "formula": "BASIC + LUNCH + PHONE + OVERTIME + BONUS + SALES_BONUS"
     },
     {
-      "id": "4c3e79df-3b98-4f6e-9880-a66a7c8ac58b",
+      "id": "6079ac6b-3751-474e-903a-aa3bda91c0a7",
       "code": "INSURANCE_BASE",
-      "name": "Insurance Base Salary (capped 36M)",
+      "name": "Insurance Base (capped 36M)",
       "sequence": 20,
       "category": "insurance",
       "condition": "insurance_enabled",
-      "formula": "min(BASIC, 36000000)"
+      "formula": "min(max(insurance_salary, min_wage), 36000000)"
     },
     {
-      "id": "3826732f-608a-407b-a0bd-c592ab118dcc",
+      "id": "8c89e689-cd11-419a-9602-09d16d701d8c",
       "code": "BHXH",
       "name": "Social Insurance (8%)",
       "sequence": 21,
@@ -82,7 +82,7 @@
       "formula": "INSURANCE_BASE * 0.08"
     },
     {
-      "id": "3fb41b7d-1846-4e61-b60d-55b9e6223bd5",
+      "id": "dce28802-181f-4668-b21c-2c314509d204",
       "code": "BHYT",
       "name": "Health Insurance (1.5%)",
       "sequence": 22,
@@ -91,7 +91,7 @@
       "formula": "INSURANCE_BASE * 0.015"
     },
     {
-      "id": "f8b056d3-c156-4e8d-a6db-008ab1cd8a1a",
+      "id": "63d74cef-3fec-4afa-bc88-3583ef790724",
       "code": "BHTN",
       "name": "Unemployment Insurance (1%)",
       "sequence": 23,
@@ -100,7 +100,7 @@
       "formula": "INSURANCE_BASE * 0.01"
     },
     {
-      "id": "b9009571-8bef-4008-9044-f8ce6c3a5da8",
+      "id": "1c7d7a28-d01c-46ba-8a50-82b08bd06a7d",
       "code": "TOTAL_INSURANCE",
       "name": "Total Insurance (10.5%)",
       "sequence": 24,
@@ -109,7 +109,7 @@
       "formula": "BHXH + BHYT + BHTN"
     },
     {
-      "id": "ed3409cc-575a-4db1-bebb-693e3fab39c9",
+      "id": "079147d3-0b67-4775-930c-9fd311a1a9b5",
       "code": "PERSONAL_DEDUCTION",
       "name": "Personal Tax Deduction",
       "sequence": 30,
@@ -118,7 +118,7 @@
       "formula": "11000000"
     },
     {
-      "id": "b28a6ca6-886f-41ab-b644-bc008c633975",
+      "id": "4343a284-36ae-49df-b8c1-cb38c378715d",
       "code": "DEPENDENT_DEDUCTION",
       "name": "Dependent Deduction",
       "sequence": 31,
@@ -127,7 +127,7 @@
       "formula": "dependents * 4400000"
     },
     {
-      "id": "6fbd57f3-aeff-49ba-bfb6-0ae060fe18ed",
+      "id": "946e6bec-e7db-44cb-beff-2f2df64795d2",
       "code": "TAXABLE_INCOME",
       "name": "Taxable Income",
       "sequence": 32,
@@ -136,7 +136,7 @@
       "formula": "max(0, GROSS - TOTAL_INSURANCE - PERSONAL_DEDUCTION - DEPENDENT_DEDUCTION)"
     },
     {
-      "id": "5c3594b2-7ee6-4350-89d1-bf46bfd7d2d0",
+      "id": "1b44b6ab-0786-4e52-b99b-cf1ac27ad736",
       "code": "PIT",
       "name": "Personal Income Tax (TNCN)",
       "sequence": 40,
@@ -145,7 +145,7 @@
       "formula": "progressive_tax(TAXABLE_INCOME)"
     },
     {
-      "id": "cc1a3029-247c-44e5-a943-29f9b84308bc",
+      "id": "b5fe0d14-4d22-491d-9fee-8c312ab906e5",
       "code": "NET",
       "name": "Net Salary",
       "sequence": 50,
@@ -156,7 +156,9 @@
   ],
   "context": {
     "base_salary": 10000000,
-    "overtime_hours": 10,
+    "insurance_salary": 4500000,
+    "region": "II",
+    "overtime_hours": 0,
     "hourly_rate": 48000,
     "sales_amount": 0,
     "dependents": 1,

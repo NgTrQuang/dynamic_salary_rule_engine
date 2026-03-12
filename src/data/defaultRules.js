@@ -7,7 +7,7 @@ export const defaultRules = [
     sequence: 1,
     category: "earning",
     condition: "",
-    formula: "(base_salary / 26) * (working_days - leave_days)"
+    formula: "base_salary"
   },
   {
     id: crypto.randomUUID(),
@@ -54,25 +54,27 @@ export const defaultRules = [
     condition: "sales_amount > 0",
     formula: "sales_amount * 0.05"
   },
-  // ── GROSS ────────────────────────────────────────────────
+  // ── GROSS (thực nhận, dùng cho thuế) ────────────────────
   {
     id: crypto.randomUUID(),
     code: "GROSS",
-    name: "Gross Salary",
+    name: "Gross Salary (actual)",
     sequence: 10,
     category: "summary",
     condition: "",
     formula: "BASIC + LUNCH + PHONE + OVERTIME + BONUS + SALES_BONUS"
   },
-  // ── INSURANCE (BHXH / BHYT / BHTN) ───────────────────────
+  // ── INSURANCE BASE (lương đóng BH, có trần 36tr) ─────────
+  // insurance_salary nhập từ context — là lương hợp đồng / lương đóng BH
+  // có thể thấp hơn base_salary nhưng không thấp hơn lương tối thiểu vùng
   {
     id: crypto.randomUUID(),
     code: "INSURANCE_BASE",
-    name: "Insurance Base Salary (capped 36M)",
+    name: "Insurance Base (capped 36M)",
     sequence: 20,
     category: "insurance",
     condition: "insurance_enabled",
-    formula: "min(BASIC, 36000000)"
+    formula: "min(max(insurance_salary, min_wage), 36000000)"
   },
   {
     id: crypto.randomUUID(),
@@ -110,7 +112,7 @@ export const defaultRules = [
     condition: "insurance_enabled",
     formula: "BHXH + BHYT + BHTN"
   },
-  // ── PERSONAL INCOME TAX (TNCN) ───────────────────────────
+  // ── PERSONAL INCOME TAX (TNCN) — tính trên GROSS thực ───
   {
     id: crypto.randomUUID(),
     code: "PERSONAL_DEDUCTION",
@@ -159,9 +161,19 @@ export const defaultRules = [
   }
 ];
 
+// Lương tối thiểu vùng theo Nghị định 74/2024/NĐ-CP (hiệu lực 1/7/2024)
+export const MIN_WAGE_BY_REGION = {
+  I:   4960000,
+  II:  4410000,
+  III: 3860000,
+  IV:  3450000,
+};
+
 export const defaultContext = {
-  base_salary: 10000000,
-  overtime_hours: 10,
+  base_salary: 15000000,
+  insurance_salary: 5000000,
+  region: "III",
+  overtime_hours: 0,
   hourly_rate: 48000,
   sales_amount: 0,
   dependents: 1,
@@ -170,5 +182,5 @@ export const defaultContext = {
   tax_enabled: 1,
   working_days: 26,
   leave_days: 0,
-  late_minutes: 0
+  late_minutes: 0,
 };

@@ -3,7 +3,7 @@ import RuleTable from "./components/RuleTable";
 import ContextInput from "./components/ContextInput";
 import ResultPanel from "./components/ResultPanel";
 import { runEngine } from "./engine/ruleEngine";
-import { defaultRules, defaultContext } from "./data/defaultRules";
+import { defaultRules, defaultContext, MIN_WAGE_BY_REGION } from "./data/defaultRules";
 import { Download, Upload, Play, RefreshCw, Cpu } from "lucide-react";
 
 export default function App() {
@@ -13,14 +13,20 @@ export default function App() {
   const [autoCalc, setAutoCalc] = useState(true);
   const fileInputRef = useRef(null);
 
+  function buildContext(c) {
+    const min_wage = MIN_WAGE_BY_REGION[c.region] ?? MIN_WAGE_BY_REGION["III"];
+    return { ...c, min_wage };
+  }
+
   const calculate = useCallback((r, c) => {
-    const res = runEngine(r ?? rules, c ?? context);
+    const ctx = buildContext(c ?? context);
+    const res = runEngine(r ?? rules, ctx);
     setResults(res);
   }, [rules, context]);
 
   // Run calculation on initial load
   useEffect(() => {
-    const res = runEngine(defaultRules, defaultContext);
+    const res = runEngine(defaultRules, buildContext(defaultContext));
     setResults(res);
   }, []);
 
@@ -32,6 +38,17 @@ export default function App() {
   function handleContextChange(newCtx) {
     setContext(newCtx);
     if (autoCalc) calculate(rules, newCtx);
+  }
+
+  function getWarnings() {
+    const min_wage = MIN_WAGE_BY_REGION[context.region] ?? MIN_WAGE_BY_REGION["III"];
+    const warnings = [];
+    if (context.insurance_enabled && context.insurance_salary < min_wage) {
+      warnings.push(
+        `Lương đóng BH (${context.insurance_salary.toLocaleString("vi-VN")} ₫) thấp hơn lương tối thiểu vùng ${context.region} (${min_wage.toLocaleString("vi-VN")} ₫). Hệ thống tự động dùng mức tối thiểu.`
+      );
+    }
+    return warnings;
   }
 
   function handleReset() {
@@ -152,7 +169,7 @@ export default function App() {
 
         {/* Result Panel */}
         <section className="col-span-12 md:col-span-8 bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
-          <ResultPanel results={results} rules={rules} />
+          <ResultPanel results={results} rules={rules} warnings={getWarnings()} />
         </section>
       </main>
     </div>
