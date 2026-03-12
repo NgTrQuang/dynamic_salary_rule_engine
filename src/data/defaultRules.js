@@ -16,7 +16,7 @@ export const defaultRules = [
     sequence: 2,
     category: "earning",
     condition: "",
-    formula: "730000"
+    formula: "0"
   },
   {
     id: crypto.randomUUID(),
@@ -25,7 +25,7 @@ export const defaultRules = [
     sequence: 3,
     category: "earning",
     condition: "",
-    formula: "200000"
+    formula: "0"
   },
   {
     id: crypto.randomUUID(),
@@ -120,7 +120,7 @@ export const defaultRules = [
     sequence: 30,
     category: "tax",
     condition: "tax_enabled",
-    formula: "11000000"
+    formula: "15500000"
   },
   {
     id: crypto.randomUUID(),

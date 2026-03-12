@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { SlidersHorizontal, Info, AlertTriangle } from "lucide-react";
+import React from "react";
+import { SlidersHorizontal, AlertTriangle } from "lucide-react";
 import { MIN_WAGE_BY_REGION } from "../data/defaultRules";
+import { InfoTip } from "./Tooltip";
 
 const REGIONS = [
   { value: "I",   label: "Vùng I — 4,960,000 ₫ (HN, HCM, ...)" },
@@ -15,25 +16,12 @@ function fmt(val) {
 }
 
 function NumberField({ label, fieldKey, value, description, tooltip, warning, onChange }) {
-  const [showTip, setShowTip] = useState(false);
   return (
     <div className="flex flex-col gap-1">
       <div className="flex items-center gap-1.5">
         <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">{label}</label>
         {tooltip && (
-          <div className="relative">
-            <Info
-              size={12}
-              className="text-gray-400 cursor-pointer hover:text-blue-500"
-              onMouseEnter={() => setShowTip(true)}
-              onMouseLeave={() => setShowTip(false)}
-            />
-            {showTip && (
-              <div className="absolute left-4 top-0 z-10 w-56 bg-gray-800 text-white text-xs rounded-lg px-3 py-2 shadow-lg">
-                {tooltip}
-              </div>
-            )}
-          </div>
+          <InfoTip size={12} info={{ title: label, explanation: tooltip, legal: "" }} />
         )}
       </div>
       {description && <p className="text-xs text-gray-400">{description}</p>}

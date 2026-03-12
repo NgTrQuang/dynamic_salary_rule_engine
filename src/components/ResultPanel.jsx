@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Calculator, AlertTriangle, MinusCircle, ChevronDown, ChevronUp } from "lucide-react";
+import { RULE_INFO } from "../data/ruleInfo";
+import { InfoTip } from "./Tooltip";
 
 function formatVND(val) {
   if (val === null || val === undefined) return "—";
@@ -89,7 +91,10 @@ function ResultRow({ r, rowCls, valueCls }) {
   return (
     <div className={`flex items-center justify-between px-3 py-1.5 rounded-lg ${rowCls} ${isMuted ? "opacity-60" : ""}`}>
       <div className="flex flex-col">
-        <span className={`text-xs font-mono font-bold ${isMuted ? "text-gray-500" : valueCls}`}>{r.code}</span>
+        <div className="flex items-center gap-1">
+          <span className={`text-xs font-mono font-bold ${isMuted ? "text-gray-500" : valueCls}`}>{r.code}</span>
+          <InfoTip size={11} info={RULE_INFO[r.code]} />
+        </div>
         <span className="text-xs text-gray-500">{r.name}</span>
       </div>
       <span className={`text-sm font-mono font-semibold ${isDeduction ? "text-red-700" : isMuted ? "text-gray-500" : valueCls}`}>
@@ -112,16 +117,16 @@ function SectionBlock({ section, resultMap, allResults }) {
   if (rows.length === 0) return null;
 
   return (
-    <div className={`rounded-xl border overflow-hidden ${section.headerCls}`}>
+    <div className={`rounded-xl border ${section.headerCls}`}>
       <button
         onClick={() => setOpen((v) => !v)}
-        className={`w-full flex items-center justify-between px-3 py-2 text-xs font-bold uppercase tracking-wider border-b ${section.headerCls}`}
+        className={`w-full flex items-center justify-between px-3 py-2 text-xs font-bold uppercase tracking-wider border-b rounded-t-xl ${section.headerCls}`}
       >
         <span>{section.label}</span>
         {open ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
       </button>
       {open && (
-        <div className="flex flex-col gap-1 p-2 bg-white">
+        <div className="flex flex-col gap-1 p-2 bg-white rounded-b-xl">
           {rows.map((r) => (
             <ResultRow key={r.code} r={r} rowCls={section.rowCls} valueCls={section.valueCls} />
           ))}

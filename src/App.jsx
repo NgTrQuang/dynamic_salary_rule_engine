@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import RuleTable from "./components/RuleTable";
 import ContextInput from "./components/ContextInput";
 import ResultPanel from "./components/ResultPanel";
+import InfoModal from "./components/InfoModal";
 import { runEngine } from "./engine/ruleEngine";
 import { defaultRules, defaultContext, MIN_WAGE_BY_REGION } from "./data/defaultRules";
 import { Download, Upload, Play, RefreshCw, Cpu } from "lucide-react";
@@ -136,6 +137,8 @@ export default function App() {
             <Upload size={14} /> Import JSON
           </button>
           <input ref={fileInputRef} type="file" accept=".json" className="hidden" onChange={handleImport} />
+
+          <InfoModal />
 
           <button
             onClick={handleReset}

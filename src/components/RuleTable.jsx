@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Plus, Trash2, ChevronUp, ChevronDown } from "lucide-react";
+import { RULE_INFO, CATEGORY_INFO } from "../data/ruleInfo";
+import { InfoTip } from "./Tooltip";
 
 const EMPTY_RULE = {
   code: "",
@@ -187,13 +189,16 @@ export default function RuleTable({ rules, onChange, results = [], context = {} 
                 <td className="px-3 py-1.5">
                   <EditableCell rowId={rule.id} field="sequence" value={rule.sequence} type="number" small />
                 </td>
-                <td className="px-3 py-1.5 font-mono font-semibold text-gray-800">
-                  <EditableCell rowId={rule.id} field="code" value={rule.code} />
+                <td className="px-3 py-1.5 font-mono text-xs font-semibold text-gray-800">
+                  <div className="flex items-center gap-1.5">
+                    <EditableCell rowId={rule.id} field="code" value={rule.code} />
+                    <InfoTip size={13} info={RULE_INFO[rule.code] || CATEGORY_INFO[rule.category]} />
+                  </div>
                 </td>
                 <td className="px-3 py-1.5 text-gray-600">
                   <EditableCell rowId={rule.id} field="name" value={rule.name} />
                 </td>
-                <td className="px-3 py-1.5">
+                <td className="px-3 py-1.5" title={CATEGORY_INFO[rule.category]?.explanation ?? ""}>
                   <CategoryCell rowId={rule.id} value={rule.category} />
                 </td>
                 <td className="px-3 py-1.5 font-mono text-gray-600">
