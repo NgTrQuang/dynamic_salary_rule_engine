@@ -1,0 +1,170 @@
+{
+  "rules": [
+    {
+      "id": "00add850-58e7-431a-ae59-2a2058633249",
+      "code": "BASIC",
+      "name": "Basic Salary",
+      "sequence": 1,
+      "category": "earning",
+      "condition": "",
+      "formula": "(base_salary / 26) * (working_days - leave_days)"
+    },
+    {
+      "id": "61b5bd62-7ebf-47f2-af09-4b8e39c33bdc",
+      "code": "LUNCH",
+      "name": "Lunch Allowance",
+      "sequence": 2,
+      "category": "earning",
+      "condition": "",
+      "formula": "730000"
+    },
+    {
+      "id": "04626af5-c93c-4996-8299-a50d5fc1b236",
+      "code": "PHONE",
+      "name": "Phone Allowance",
+      "sequence": 3,
+      "category": "earning",
+      "condition": "",
+      "formula": "200000"
+    },
+    {
+      "id": "39530755-dc6c-498e-8715-86cd6ef03c72",
+      "code": "OVERTIME",
+      "name": "Overtime Pay",
+      "sequence": 4,
+      "category": "earning",
+      "condition": "overtime_hours > 0",
+      "formula": "overtime_hours * hourly_rate * 1.5"
+    },
+    {
+      "id": "37b1025e-f361-4b45-b458-06b5bb88e184",
+      "code": "BONUS",
+      "name": "Bonus",
+      "sequence": 5,
+      "category": "earning",
+      "condition": "bonus > 0",
+      "formula": "bonus"
+    },
+    {
+      "id": "da9d8af1-1195-4155-a608-32aa47ef187c",
+      "code": "SALES_BONUS",
+      "name": "Sales Commission (5%)",
+      "sequence": 6,
+      "category": "earning",
+      "condition": "sales_amount > 0",
+      "formula": "sales_amount * 0.05"
+    },
+    {
+      "id": "9580be66-72c2-492e-b217-d64cd3d5ed26",
+      "code": "GROSS",
+      "name": "Gross Salary",
+      "sequence": 10,
+      "category": "summary",
+      "condition": "",
+      "formula": "BASIC + LUNCH + PHONE + OVERTIME + BONUS + SALES_BONUS"
+    },
+    {
+      "id": "4c3e79df-3b98-4f6e-9880-a66a7c8ac58b",
+      "code": "INSURANCE_BASE",
+      "name": "Insurance Base Salary (capped 36M)",
+      "sequence": 20,
+      "category": "insurance",
+      "condition": "insurance_enabled",
+      "formula": "min(BASIC, 36000000)"
+    },
+    {
+      "id": "3826732f-608a-407b-a0bd-c592ab118dcc",
+      "code": "BHXH",
+      "name": "Social Insurance (8%)",
+      "sequence": 21,
+      "category": "insurance",
+      "condition": "insurance_enabled",
+      "formula": "INSURANCE_BASE * 0.08"
+    },
+    {
+      "id": "3fb41b7d-1846-4e61-b60d-55b9e6223bd5",
+      "code": "BHYT",
+      "name": "Health Insurance (1.5%)",
+      "sequence": 22,
+      "category": "insurance",
+      "condition": "insurance_enabled",
+      "formula": "INSURANCE_BASE * 0.015"
+    },
+    {
+      "id": "f8b056d3-c156-4e8d-a6db-008ab1cd8a1a",
+      "code": "BHTN",
+      "name": "Unemployment Insurance (1%)",
+      "sequence": 23,
+      "category": "insurance",
+      "condition": "insurance_enabled",
+      "formula": "INSURANCE_BASE * 0.01"
+    },
+    {
+      "id": "b9009571-8bef-4008-9044-f8ce6c3a5da8",
+      "code": "TOTAL_INSURANCE",
+      "name": "Total Insurance (10.5%)",
+      "sequence": 24,
+      "category": "insurance",
+      "condition": "insurance_enabled",
+      "formula": "BHXH + BHYT + BHTN"
+    },
+    {
+      "id": "ed3409cc-575a-4db1-bebb-693e3fab39c9",
+      "code": "PERSONAL_DEDUCTION",
+      "name": "Personal Tax Deduction",
+      "sequence": 30,
+      "category": "tax",
+      "condition": "tax_enabled",
+      "formula": "11000000"
+    },
+    {
+      "id": "b28a6ca6-886f-41ab-b644-bc008c633975",
+      "code": "DEPENDENT_DEDUCTION",
+      "name": "Dependent Deduction",
+      "sequence": 31,
+      "category": "tax",
+      "condition": "tax_enabled && dependents > 0",
+      "formula": "dependents * 4400000"
+    },
+    {
+      "id": "6fbd57f3-aeff-49ba-bfb6-0ae060fe18ed",
+      "code": "TAXABLE_INCOME",
+      "name": "Taxable Income",
+      "sequence": 32,
+      "category": "tax",
+      "condition": "tax_enabled",
+      "formula": "max(0, GROSS - TOTAL_INSURANCE - PERSONAL_DEDUCTION - DEPENDENT_DEDUCTION)"
+    },
+    {
+      "id": "5c3594b2-7ee6-4350-89d1-bf46bfd7d2d0",
+      "code": "PIT",
+      "name": "Personal Income Tax (TNCN)",
+      "sequence": 40,
+      "category": "tax",
+      "condition": "tax_enabled",
+      "formula": "progressive_tax(TAXABLE_INCOME)"
+    },
+    {
+      "id": "cc1a3029-247c-44e5-a943-29f9b84308bc",
+      "code": "NET",
+      "name": "Net Salary",
+      "sequence": 50,
+      "category": "summary",
+      "condition": "",
+      "formula": "GROSS - TOTAL_INSURANCE - PIT"
+    }
+  ],
+  "context": {
+    "base_salary": 10000000,
+    "overtime_hours": 10,
+    "hourly_rate": 48000,
+    "sales_amount": 0,
+    "dependents": 1,
+    "bonus": 0,
+    "insurance_enabled": 1,
+    "tax_enabled": 1,
+    "working_days": 26,
+    "leave_days": 0,
+    "late_minutes": 0
+  }
+}

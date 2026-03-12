@@ -7,7 +7,7 @@ export const defaultRules = [
     sequence: 1,
     category: "earning",
     condition: "",
-    formula: "base_salary"
+    formula: "(base_salary / 26) * (working_days - leave_days)"
   },
   {
     id: crypto.randomUUID(),
