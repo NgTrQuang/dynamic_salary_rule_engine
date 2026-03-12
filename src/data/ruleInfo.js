@@ -32,12 +32,12 @@ export const RULE_INFO = {
   GROSS: {
     title: "Gross Salary (Tổng thu nhập trước khấu trừ)",
     explanation: "Tổng tất cả thu nhập thực nhận: lương cơ bản + phụ cấp + thưởng + làm thêm + hoa hồng. Đây là căn cứ tính thuế TNCN.",
-    legal: "Luật Thuế TNCN 2007 (sửa đổi 2012, 2014) Điều 3",
+    legal: "Luật Thuế TNCN 2025 Điều 3 (trước 01/07/2026: Luật TNCN 2007 sửa đổi)",
   },
   INSURANCE_BASE: {
     title: "Insurance Base (Lương đóng bảo hiểm)",
-    explanation: "Lương làm căn cứ đóng BHXH/BHYT/BHTN. = max(insurance_salary, lương tối thiểu vùng), không vượt 36,000,000 ₫ (20 × lương cơ sở).",
-    legal: "Luật BHXH 2014 Điều 89 · Nghị định 115/2015/NĐ-CP · Nghị định 74/2024/NĐ-CP",
+    explanation: "Lương làm căn cứ đóng BHXH/BHYT/BHTN. = max(insurance_salary, lương tối thiểu vùng), không vượt 20× lương cơ sở (H1 2026: 46,800,000 ₫ · H2 2026: 50,540,000 ₫).",
+    legal: "Luật BHXH 2014 Điều 89 · NĐ 115/2015/NĐ-CP · NĐ 293/2025/NĐ-CP (lương tối thiểu vùng 2026)",
   },
   BHXH: {
     title: "BHXH — Bảo hiểm xã hội (8%)",
@@ -61,23 +61,23 @@ export const RULE_INFO = {
   },
   PERSONAL_DEDUCTION: {
     title: "Giảm trừ bản thân (15,500,000 ₫/tháng)",
-    explanation: "Mức giảm trừ cho chính người nộp thuế: 15,500,000 ₫/tháng (186,000,000 ₫/năm). Nâng từ 11,000,000 ₫ theo Luật Thuế TNCN 2025, áp dụng từ 01/01/2026.",
-    legal: "Luật Thuế TNCN 2025 — khoản 2 Điều 29 (áp dụng từ kỳ tính thuế 2026)",
+    explanation: "Mức giảm trừ cho chính người nộp thuế: 15,500,000 ₫/tháng (186,000,000 ₫/năm). Nâng từ 11,000,000 ₫ theo Nghị quyết 110/2025/UBTVQH15, áp dụng từ 01/01/2026.",
+    legal: "Nghị quyết 110/2025/UBTVQH15 · Luật Thuế TNCN 2025 khoản 2 Điều 29 (hiệu lực 01/01/2026)",
   },
   DEPENDENT_DEDUCTION: {
     title: "Giảm trừ người phụ thuộc (6,200,000 ₫/người/tháng)",
-    explanation: "Mỗi người phụ thuộc được đăng ký giảm trừ 6,200,000 ₫/tháng. Phải đăng ký với cơ quan thuế.",
-    legal: "Nghị quyết 110/2025/UBTVQH15 (17/10/2025) · Luật Thuế TNCN 2025 Điều 29 — áp dụng từ 01/01/2026",
+    explanation: "Mỗi người phụ thuộc được đăng ký giảm trừ 6,200,000 ₫/tháng. Nâng từ 4,400,000 ₫. Phải đăng ký với cơ quan thuế.",
+    legal: "Nghị quyết 110/2025/UBTVQH15 (17/10/2025) · Luật Thuế TNCN 2025 Điều 29 (01/01/2026)",
   },
   TAXABLE_INCOME: {
     title: "Thu nhập tính thuế (Taxable Income)",
     explanation: "= max(0, GROSS − Tổng BH − Giảm trừ bản thân − Giảm trừ người phụ thuộc). Không âm.",
-    legal: "Luật Thuế TNCN Điều 21 · Thông tư 111/2013/TT-BTC Điều 9",
+    legal: "Luật Thuế TNCN 2025 Điều 21 · Thông tư 111/2013/TT-BTC Điều 9",
   },
   PIT: {
     title: "Thuế TNCN — Personal Income Tax",
-    explanation: "Tính theo biểu thuế lũy tiến 7 bậc: 5%→10%→15%→20%→25%→30%→35%. Áp dụng trên thu nhập tính thuế sau khi giảm trừ.",
-    legal: "Luật Thuế TNCN 2007 Điều 22 · Thông tư 111/2013/TT-BTC Phụ lục 01",
+    explanation: "H1 2026: biểu lũy tiến 7 bậc (5→10→15→20→25→30→35%). Từ 01/07/2026 (Luật PIT 2025): 5 bậc mới (5→10→20→30→35%). Dùng hàm progressive_tax() cho H1, progressive_tax_h2() cho H2.",
+    legal: "Luật Thuế TNCN 2025 (hiệu lực 01/07/2026) · Thông tư 111/2013/TT-BTC (trước 01/07/2026)",
   },
   NET: {
     title: "NET Salary (Lương thực lĩnh)",
@@ -99,8 +99,8 @@ export const CATEGORY_INFO = {
   },
   tax: {
     title: "Thuế TNCN & Giảm trừ",
-    explanation: "Các khoản giảm trừ và thuế thu nhập cá nhân tính theo biểu lũy tiến.",
-    legal: "Luật Thuế TNCN · NQ 954/2020 · NQ 110/2025/UBTVQH15",
+    explanation: "Các khoản giảm trừ và thuế thu nhập cá nhân. Từ 01/07/2026 áp dụng biểu thuế 5 bậc theo Luật Thuế TNCN 2025.",
+    legal: "Luật Thuế TNCN 2025 (01/07/2026) · NQ 110/2025/UBTVQH15 (01/01/2026)",
   },
   summary: {
     title: "Tổng hợp (Summary)",

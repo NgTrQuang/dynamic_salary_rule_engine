@@ -80,6 +80,7 @@ export default function ContextInput({ context, onChange }) {
   }
 
   const minWage = MIN_WAGE_BY_REGION[context.region] ?? MIN_WAGE_BY_REGION["III"];
+  const insuranceCap = (context.gov_base_salary ?? 2340000) * 20;
   const insuranceWarn =
     context.insurance_enabled && context.insurance_salary < minWage
       ? t.warnInsuranceBelowMin.replace("{region}", context.region).replace("{min}", fmt(minWage))
@@ -142,6 +143,10 @@ export default function ContextInput({ context, onChange }) {
               {t.fieldMinWageDisplay.replace("{region}", context.region)}{" "}
               <span className="font-semibold text-gray-700">{fmt(minWage)} ₫</span>
             </div>
+          </div>
+          <NumberField label={t.fieldGovBaseSalary} fieldKey="gov_base_salary" value={context.gov_base_salary ?? 2340000} description={t.fieldGovBaseSalaryDesc} onChange={handleChange} />
+          <div className="text-xs text-gray-500 bg-gray-50 rounded-lg px-2 py-1">
+            {t.fieldInsuranceCap} <span className="font-semibold text-gray-700">{fmt(insuranceCap)} ₫</span>
           </div>
           <NumberField label={t.fieldDependents} fieldKey="dependents" value={context.dependents} description={t.fieldDependentsDesc} onChange={handleChange} />
           <ToggleField label={t.fieldInsuranceToggle} fieldKey="insurance_enabled" value={context.insurance_enabled} description={t.fieldInsuranceToggleDesc} onChange={handleChange} />

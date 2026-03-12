@@ -53,6 +53,9 @@ const en = {
   fieldMinWageDisplay: "Regional minimum wage ({region}):",
   fieldDependents: "Dependents",
   fieldDependentsDesc: "Number of dependents (deduction 6,200,000 ₫/person — NR 110/2025, from 01/01/2026)",
+  fieldGovBaseSalary: "Government Base Salary",
+  fieldGovBaseSalaryDesc: "Used to calculate insurance cap (20× base salary). H1 2026: 2,340,000 ₫ · H2 2026: 2,527,000 ₫ — Decree 73/2024/ND-CP",
+  fieldInsuranceCap: "Insurance cap (20×):",
   fieldInsuranceToggle: "Insurance (BHXH/BHYT/BHTN)",
   fieldInsuranceToggleDesc: "Enable = apply mandatory social insurance",
   fieldTaxToggle: "Income Tax (PIT)",
@@ -96,13 +99,23 @@ const en = {
   step3Desc: "Each rule checks its condition. If false → rule is skipped. If true → formula is evaluated and stored as a variable for subsequent rules.",
   step4Title: "Generate Payslip Summary",
   step4Desc: "Results are grouped by category: Earnings → Gross → Insurance → PIT → NET. The Rule Editor shows the live computed value per row.",
-  modalFooter: "Updated to latest regulations: PIT Law 2025 (01/01/2026) · Decree 74/2024/ND-CP (01/07/2024)",
+  modalFooter: "Updated: PIT Law 2025 (01/07/2026) · NR 110/2025 (01/01/2026) · Decree 293/2025 (01/01/2026) · Decree 73/2024",
 
-  // Regions
-  regionI:   "Region I — 4,960,000 ₫ (Hanoi, HCM...)",
-  regionII:  "Region II — 4,410,000 ₫",
-  regionIII: "Region III — 3,860,000 ₫",
-  regionIV:  "Region IV — 3,450,000 ₫",
+  // Legal timeline
+  legalTimeline2026: "2026 Effective Date Timeline",
+  timeline1: "PIT deduction increase (NR 110/2025): personal 15.5M, dependent 6.2M/month",
+  timeline2: "New regional minimum wages (Decree 293/2025): Region I 5.31M, II 4.73M, III 4.14M, IV 3.7M",
+  timeline3: "PIT Law 2025 takes effect: new 5-bracket tax table (5→10→20→30→35%)",
+  timeline4: "Base salary increases to 2,527,000 ₫ (Decree 73/2024) → insurance cap = 50,540,000 ₫",
+
+  // Regions (Decree 293/2025/ND-CP, effective 01/01/2026)
+  regionI:   "Region I — 5,310,000 ₫ (Hanoi, HCM...)",
+  regionII:  "Region II — 4,730,000 ₫",
+  regionIII: "Region III — 4,140,000 ₫",
+  regionIV:  "Region IV — 3,700,000 ₫",
+
+  fieldRegionDesc: "Per Decree 293/2025/ND-CP (effective 01/01/2026)",
+  fieldInsuranceSalaryTip: "Salary in labor contract for BHXH/BHYT/BHTN. Must not be below regional minimum wage. H1 2026 cap: 46,800,000 ₫ (20×2,340,000). H2 2026 cap: 50,540,000 ₫ (20×2,527,000). Decree 73/2024/ND-CP.",
 };
 
 export default en;

@@ -1,12 +1,13 @@
 /**
- * Vietnamese PIT progressive tax (7 brackets, Circular 111/2013/TT-BTC).
+ * Vietnamese PIT progressive tax — 7 brackets (Circular 111/2013/TT-BTC).
+ * Applicable: H1 2026 (01/01/2026 – 30/06/2026) and prior.
  * Income unit: VND/month (taxable income after all deductions).
  */
 function progressive_tax(taxableIncome) {
   if (!taxableIncome || taxableIncome <= 0) return 0;
 
   const brackets = [
-    { limit: 5_000_000,  rate: 0.05 },
+    { limit:  5_000_000, rate: 0.05 },
     { limit: 10_000_000, rate: 0.10 },
     { limit: 18_000_000, rate: 0.15 },
     { limit: 32_000_000, rate: 0.20 },
@@ -15,6 +16,30 @@ function progressive_tax(taxableIncome) {
     { limit: Infinity,   rate: 0.35 },
   ];
 
+  return _calcTax(taxableIncome, brackets);
+}
+
+/**
+ * Vietnamese PIT progressive tax — 5 brackets (PIT Law 2025).
+ * Applicable: H2 2026 (from 01/07/2026).
+ * Income unit: VND/month (taxable income after all deductions).
+ */
+function progressive_tax_h2(taxableIncome) {
+  if (!taxableIncome || taxableIncome <= 0) return 0;
+
+  const brackets = [
+    { limit:  10_000_000, rate: 0.05 },
+    { limit:  30_000_000, rate: 0.10 },
+    { limit:  60_000_000, rate: 0.20 },
+    { limit: 100_000_000, rate: 0.30 },
+    { limit: Infinity,    rate: 0.35 },
+  ];
+
+  return _calcTax(taxableIncome, brackets);
+}
+
+/** Shared bracket calculation helper */
+function _calcTax(taxableIncome, brackets) {
   let tax = 0;
   let remaining = taxableIncome;
   let prev = 0;
@@ -54,9 +79,9 @@ function evaluate(expression, variables) {
   try {
     // eslint-disable-next-line no-new-func
     return Function(
-      "progressive_tax", "min", "max",
+      "progressive_tax", "progressive_tax_h2", "min", "max",
       `"use strict"; return (${expr})`
-    )(progressive_tax, Math.min, Math.max);
+    )(progressive_tax, progressive_tax_h2, Math.min, Math.max);
   } catch {
     return null;
   }

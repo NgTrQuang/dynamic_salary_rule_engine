@@ -70,11 +70,11 @@ export const defaultRules = [
   {
     id: crypto.randomUUID(),
     code: "INSURANCE_BASE",
-    name: "Insurance Base (capped 36M)",
+    name: "Insurance Base (capped 20× base)",
     sequence: 20,
     category: "insurance",
     condition: "insurance_enabled",
-    formula: "min(max(insurance_salary, min_wage), 36000000)"
+    formula: "min(max(insurance_salary, min_wage), gov_base_salary * 20)"
   },
   {
     id: crypto.randomUUID(),
@@ -161,17 +161,54 @@ export const defaultRules = [
   }
 ];
 
-// Lương tối thiểu vùng theo Nghị định 74/2024/NĐ-CP (hiệu lực 1/7/2024)
+// Lương tối thiểu vùng theo Nghị định 293/2025/NĐ-CP (hiệu lực 01/01/2026)
 export const MIN_WAGE_BY_REGION = {
+  I:   5310000,
+  II:  4730000,
+  III: 4140000,
+  IV:  3700000,
+};
+
+// Lương tối thiểu vùng cũ theo Nghị định 74/2024/NĐ-CP (hiệu lực 1/7/2024 – 31/12/2025)
+export const MIN_WAGE_BY_REGION_2024 = {
   I:   4960000,
   II:  4410000,
   III: 3860000,
   IV:  3450000,
 };
 
+/**
+ * Hằng số Payroll Việt Nam 2026
+ * H1: 01/01/2026 – 30/06/2026
+ * H2: 01/07/2026 – 31/12/2026
+ */
+export const PAYROLL_CONSTANTS = {
+  H1: {
+    effective_from: "2026-01-01",
+    effective_to:   "2026-06-30",
+    personal_deduction:  15_500_000,  // NQ 110/2025/UBTVQH15
+    dependent_deduction:  6_200_000,  // NQ 110/2025/UBTVQH15
+    base_salary:          2_340_000,  // NĐ 73/2024/NĐ-CP
+    pit_brackets: 7,                  // Biểu thuế 7 bậc cũ
+    insurance_cap_multiplier: 20,     // 20 × lương cơ sở
+    get insurance_cap() { return this.base_salary * this.insurance_cap_multiplier; }, // 46,800,000
+  },
+  H2: {
+    effective_from: "2026-07-01",
+    effective_to:   null,
+    personal_deduction:  15_500_000,  // Luật Thuế TNCN 2025
+    dependent_deduction:  6_200_000,  // Luật Thuế TNCN 2025
+    base_salary:          2_527_000,  // NĐ 73/2024/NĐ-CP (cập nhật)
+    pit_brackets: 5,                  // Biểu thuế 5 bậc mới (Luật PIT 2025)
+    insurance_cap_multiplier: 20,
+    get insurance_cap() { return this.base_salary * this.insurance_cap_multiplier; }, // 50,540,000
+  },
+};
+
 export const defaultContext = {
   base_salary: 15000000,
   insurance_salary: 5000000,
+  gov_base_salary: 2340000,
   region: "III",
   overtime_hours: 0,
   hourly_rate: 48000,

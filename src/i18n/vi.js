@@ -53,6 +53,9 @@ const vi = {
   fieldMinWageDisplay: "Lương tối thiểu vùng {region}:",
   fieldDependents: "Người phụ thuộc",
   fieldDependentsDesc: "Số người phụ thuộc (giảm trừ 6,200,000 ₫/người — NQ 110/2025, từ 01/01/2026)",
+  fieldGovBaseSalary: "Lương cơ sở nhà nước",
+  fieldGovBaseSalaryDesc: "Dùng tính trần đóng BH (20× lương cơ sở). H1 2026: 2,340,000 ₫ · H2 2026: 2,527,000 ₫ — NĐ 73/2024/NĐ-CP",
+  fieldInsuranceCap: "Trần đóng BH (20×):",
   fieldInsuranceToggle: "Bảo hiểm (BHXH/BHYT/BHTN)",
   fieldInsuranceToggleDesc: "Bật = áp dụng bảo hiểm bắt buộc",
   fieldTaxToggle: "Thuế TNCN",
@@ -96,13 +99,23 @@ const vi = {
   step3Desc: "Mỗi rule kiểm tra điều kiện (condition). Nếu condition = false → rule bị skip. Nếu true → formula được tính và lưu vào biến kết quả.",
   step4Title: "Tổng hợp phiếu lương",
   step4Desc: "Kết quả được nhóm theo danh mục: Thu nhập → Gross → Bảo hiểm → Thuế TNCN → NET. Rule Editor hiển thị giá trị thực tế từng dòng.",
-  modalFooter: "Cập nhật theo quy định mới nhất: Luật Thuế TNCN 2025 (01/01/2026) · Nghị định 74/2024/NĐ-CP (01/07/2024)",
+  modalFooter: "Cập nhật: Luật Thuế TNCN 2025 (01/07/2026) · NQ 110/2025 (01/01/2026) · NĐ 293/2025 (01/01/2026) · NĐ 73/2024",
 
-  // Regions
-  regionI:   "Vùng I — 4,960,000 ₫ (HN, HCM, ...)",
-  regionII:  "Vùng II — 4,410,000 ₫",
-  regionIII: "Vùng III — 3,860,000 ₫",
-  regionIV:  "Vùng IV — 3,450,000 ₫",
+  // Legal timeline
+  legalTimeline2026: "Timeline hiệu lực 2026",
+  timeline1: "Tăng giảm trừ TNCN (NQ 110/2025): bản thân 15.5tr, người phụ thuộc 6.2tr/tháng",
+  timeline2: "Lương tối thiểu vùng mới (NĐ 293/2025): Vùng I 5.31tr, II 4.73tr, III 4.14tr, IV 3.7tr",
+  timeline3: "Luật Thuế TNCN 2025 hiệu lực: biểu thuế 5 bậc (5→10→20→30→35%)",
+  timeline4: "Lương cơ sở tăng lên 2,527,000 ₫ (NĐ 73/2024) → trần BH = 50,540,000 ₫",
+
+  // Regions (NĐ 293/2025/NĐ-CP, hiệu lực 01/01/2026)
+  regionI:   "Vùng I — 5,310,000 ₫ (HN, HCM, ...)",
+  regionII:  "Vùng II — 4,730,000 ₫",
+  regionIII: "Vùng III — 4,140,000 ₫",
+  regionIV:  "Vùng IV — 3,700,000 ₫",
+
+  fieldRegionDesc: "Theo Nghị định 293/2025/NĐ-CP (hiệu lực 01/01/2026)",
+  fieldInsuranceSalaryTip: "Lương ghi trong hợp đồng dùng đóng BHXH/BHYT/BHTN. Không thấp hơn lương tối thiểu vùng. H1 2026: trần 46,800,000 ₫ (20×2,340,000). H2 2026: trần 50,540,000 ₫ (20×2,527,000). NĐ 73/2024/NĐ-CP.",
 };
 
 export default vi;
